@@ -3,3 +3,6 @@ build:
 
 run:
 	PORT=4000 ./main
+
+test:
+	go test ./tests
