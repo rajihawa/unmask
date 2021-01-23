@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
+	"github.com/rajihawa/unmask/handlers"
 )
 
 var (
@@ -25,6 +26,8 @@ func main() {
 
 	router := mux.NewRouter()
 	// Add your routes as needed
+
+	router.HandleFunc("/health", handlers.HealthHandler)
 
 	srv := &http.Server{
 		Addr: fmt.Sprintf("0.0.0.0:%s", PORT),
