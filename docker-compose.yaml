@@ -13,6 +13,17 @@ services:
       - ADMIN_PASSWORD=password
       - JWT_SIGN_KEY=supersecretkey
       - PRODUCTION=false
+      - DATABASE_URL=database:28015
+      - DATABASE_USERNAME=unmask_user
+      - DATABASE_PASSWORD=unmask@123
     working_dir: /app
     volumes:
       - ./:/app
+  database:
+    image: rethinkdb:2.4.1-buster-slim
+    ports:
+      - 28015:28015
+      - 8080:8080
+    working_dir: /data
+    volumes:
+      - ./rethink_data/:/data/rethinkdb_data
