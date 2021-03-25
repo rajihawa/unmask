@@ -1,4 +1,4 @@
-FROM golang:1.15.7-alpine3.13
+FROM golang:1.16.2-alpine3.13
 
 RUN apk update && apk add build-base
 
@@ -10,6 +10,8 @@ WORKDIR /app
 COPY . .
 
 RUN make build
+
+RUN RUN go get -u -v github.com/dgrijalva/jwt-go
 
 EXPOSE $PORT
 
