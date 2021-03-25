@@ -1,10 +1,11 @@
-FROM golang:1.15.7-alpine3.13
+FROM golang:1.16.2-alpine3.13
 
 RUN apk add --update tzdata \
     git;
 
 # Install fresh that brings reload functionality
 RUN go get github.com/pilu/fresh
+RUN go get -u -v github.com/dgrijalva/jwt-go
 
 ARG PORT
 ENV PORT=$PORT

@@ -8,6 +8,11 @@ services:
         - PORT=4000
     ports:
       - 4000:4000
+    environment:
+      - ADMIN_USERNAME=admin
+      - ADMIN_PASSWORD=password
+      - JWT_SIGN_KEY=supersecretkey
+      - PRODUCTION=false
     working_dir: /app
     volumes:
       - ./:/app

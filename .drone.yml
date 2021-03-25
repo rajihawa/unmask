@@ -4,8 +4,8 @@ type: kubernetes
 name: test
 
 steps:
-- name: kubectl
-  image: golang:1.12
-  commands:
-  - go build
-  - go test
+  - name: kubectl
+    image: golang:1.16
+    commands:
+      - go build
+      - go test
