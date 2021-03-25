@@ -12,6 +12,7 @@ COPY . .
 RUN make build
 
 RUN RUN go get -u -v github.com/dgrijalva/jwt-go
+RUN go get -v gopkg.in/rethinkdb/rethinkdb-go.v6
 
 EXPOSE $PORT
 

@@ -6,11 +6,15 @@ import (
 )
 
 var (
-	AdminUsername = os.Getenv("ADMIN_USERNAME")
-	AdminPassword = os.Getenv("ADMIN_PASSWORD")
-	JwtCookieName = "qid"
-	JwtSigningKey = []byte(os.Getenv("JWT_SIGN_KEY"))
-	IsProd        = getEnvBool("PRODUCTION")
+	AdminUsername    = os.Getenv("ADMIN_USERNAME")
+	AdminPassword    = os.Getenv("ADMIN_PASSWORD")
+	JwtCookieName    = "qid"
+	JwtSigningKey    = []byte(os.Getenv("JWT_SIGN_KEY"))
+	IsProd           = getEnvBool("PRODUCTION")
+	DatabaseUrl      = os.Getenv("DATABASE_URL")
+	DatabaseName     = "unmask"
+	DatabaseUsername = os.Getenv("DATABASE_USERNAME")
+	DatabasePassword = os.Getenv("DATABASE_PASSWORD")
 )
 
 func getEnvBool(env string) bool {
