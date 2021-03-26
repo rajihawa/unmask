@@ -1,4 +1,4 @@
-package middlewares
+package http
 
 import (
 	"fmt"
@@ -7,8 +7,8 @@ import (
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
-	"github.com/rajihawa/unmask/config"
-	"github.com/rajihawa/unmask/lib"
+	"github.com/rajihawa/unmask/core/config"
+	"github.com/rajihawa/unmask/core/lib"
 )
 
 func AdminMiddleware(next http.Handler) http.Handler {
@@ -36,7 +36,7 @@ func AdminMiddleware(next http.Handler) http.Handler {
 		currTime := time.Now().Unix()
 
 		if currTime > exp {
-			lib.HttpError(w, err, http.StatusUnauthorized, "Unauthorized.")
+			lib.HttpError(w, err, http.StatusUnauthorized, "Token expired.")
 			return
 		}
 		next.ServeHTTP(w, r)

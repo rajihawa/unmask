@@ -10,8 +10,7 @@ import (
 	"os/signal"
 	"time"
 
-	"github.com/rajihawa/unmask/database"
-	"github.com/rajihawa/unmask/routers"
+	"github.com/rajihawa/unmask/core/database/rethink"
 )
 
 var (
@@ -25,9 +24,9 @@ func main() {
 	flag.Parse()
 
 	// Init config
-	database.InitDatabase()
+	rethink.InitDatabase()
 
-	router := routers.InitRouters()
+	router := InitRouter()
 
 	srv := &http.Server{
 		Addr: fmt.Sprintf("0.0.0.0:%s", PORT),
