@@ -1,21 +1,22 @@
-package database
+package rethink
 
 import (
 	"log"
 	"strings"
 	"time"
 
-	"github.com/rajihawa/unmask/config"
+	"github.com/rajihawa/unmask/core/config"
 	r "gopkg.in/rethinkdb/rethinkdb-go.v6"
 )
 
 var (
-	tables = map[string](r.TableCreateOpts){
-		"projects": r.TableCreateOpts{
+	Session           *r.Session
+	ProjectsTableName = "projects"
+	tables            = map[string](r.TableCreateOpts){
+		ProjectsTableName: r.TableCreateOpts{
 			PrimaryKey: "id",
 		},
 	}
-	Session *r.Session
 )
 
 func InitDatabase() {

@@ -1,14 +1,14 @@
-package handlers
+package http
 
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 
 	"github.com/dgrijalva/jwt-go"
-
-	"github.com/rajihawa/unmask/config"
-	"github.com/rajihawa/unmask/lib"
+	"github.com/rajihawa/unmask/core/config"
+	"github.com/rajihawa/unmask/core/lib"
 )
 
 type adminLoginStruct struct {
@@ -60,10 +60,16 @@ func AdminLoginHandler(w http.ResponseWriter, r *http.Request) {
 		Value:    tokenString,
 		HttpOnly: true,
 		Secure:   config.IsProd,
+		Path:     "/",
 	}
 
 	// Set the cookie
 	http.SetCookie(w, cookie)
 
 	fmt.Fprintf(w, "Person: %+v,\nJWT: %s\n", loginData, tokenString)
+}
+
+func AdminMeHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	io.WriteString(w, `{"authorized": true}`)
 }
