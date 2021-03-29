@@ -5,14 +5,14 @@ import (
 	"net/http"
 
 	"github.com/rajihawa/unmask/core/lib"
-	"github.com/rajihawa/unmask/features/projects/domain"
-	"github.com/rajihawa/unmask/features/projects/repository"
-	"github.com/rajihawa/unmask/features/projects/usecases"
+	"github.com/rajihawa/unmask/features/projects/domain/models"
+	"github.com/rajihawa/unmask/features/projects/domain/repository"
+	"github.com/rajihawa/unmask/features/projects/domain/usecases"
 )
 
 func CreateProject(w http.ResponseWriter, r *http.Request) {
 	// Declare a new project struct
-	project := domain.Project{}
+	project := models.Project{}
 
 	// Try to decode the request body into struct
 	// If there is an error, respond to client with 400 status code
