@@ -10,7 +10,7 @@ import (
 	"os/signal"
 	"time"
 
-	"github.com/rajihawa/unmask/core/database/rethink"
+	"github.com/rajihawa/unmask/utils"
 )
 
 var (
@@ -24,7 +24,7 @@ func main() {
 	flag.Parse()
 
 	// Init config
-	rethink.InitDatabase()
+	utils.InitDatabase()
 
 	router := InitRouter()
 

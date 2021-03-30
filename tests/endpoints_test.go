@@ -5,7 +5,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/rajihawa/unmask/handlers"
+	"github.com/rajihawa/unmask/app/handlers"
 )
 
 // TestHealthEndpoint - tests health endpoint of server
