@@ -7,6 +7,7 @@ RUN apk add --update tzdata \
 RUN go get github.com/pilu/fresh
 RUN go get -u -v github.com/dgrijalva/jwt-go
 RUN go get -v gopkg.in/rethinkdb/rethinkdb-go.v6
+RUN go get -v github.com/rs/xid
 
 ARG PORT
 ENV PORT=$PORT

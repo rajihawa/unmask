@@ -13,11 +13,13 @@ type Project struct {
 // ProjectEntity - the project's repository
 type ProjectRepository interface {
 	GetAll() ([]Project, error)
+	Get(id string) (*Project, error)
 	Insert(project Project) error
 }
 
 // ProjectUsecases - the project's usecases
 type ProjectUsecases interface {
 	GetAll() ([]Project, error)
+	GetProject(id string) (*Project, error)
 	CreateProject(newProject Project) error
 }

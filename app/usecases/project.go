@@ -8,7 +8,7 @@ type ProjectUsecases struct {
 	repo domain.ProjectRepository
 }
 
-func NewRethinkProjectUsecase(repo domain.ProjectRepository) domain.ProjectUsecases {
+func NewProjectUsecase(repo domain.ProjectRepository) domain.ProjectUsecases {
 	return &ProjectUsecases{
 		repo: repo,
 	}
@@ -20,4 +20,8 @@ func (pu *ProjectUsecases) CreateProject(newProject domain.Project) error {
 
 func (pu *ProjectUsecases) GetAll() ([]domain.Project, error) {
 	return pu.repo.GetAll()
+}
+
+func (pu *ProjectUsecases) GetProject(id string) (*domain.Project, error) {
+	return pu.repo.Get(id)
 }
