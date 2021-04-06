@@ -16,10 +16,17 @@ var (
 	databasePassword  = os.Getenv("DATABASE_PASSWORD")
 	Session           *r.Session
 	ProjectsTableName = "projects"
+	ClientsTableName  = "clients"
 	tables            = map[string](r.TableCreateOpts){
 		ProjectsTableName: r.TableCreateOpts{
 			PrimaryKey: "id",
 		},
+		ClientsTableName: r.TableCreateOpts{
+			PrimaryKey: "id",
+		},
+	}
+	indexes = map[string](string){
+		ClientsTableName: "project_id",
 	}
 )
 
@@ -39,6 +46,12 @@ func InitDatabase() {
 
 	for tableName, tableOpts := range tables {
 		err = r.TableCreate(tableName, tableOpts).Exec(session)
+		if err != nil && !strings.Contains(err.Error(), "already exists") {
+			log.Fatalln(err)
+		}
+	}
+	for tableName, indexName := range indexes {
+		err = r.Table(tableName).IndexCreate(indexName).Exec(session)
 		if err != nil && !strings.Contains(err.Error(), "already exists") {
 			log.Fatalln(err)
 		}

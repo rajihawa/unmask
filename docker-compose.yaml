@@ -16,9 +16,11 @@ services:
       - DATABASE_URL=database:28015
       - DATABASE_USERNAME=unmask_user
       - DATABASE_PASSWORD=unmask@123
+      - AES_KEY=655368566D597133743677397A24432646294A404E635166546A576E5A723475
     working_dir: /app
     volumes:
       - ./:/app
+      - /app/tmp
   database:
     image: rethinkdb:2.4.1-buster-slim
     ports:
@@ -27,3 +29,4 @@ services:
     working_dir: /data
     volumes:
       - ./rethink_data/:/data/rethinkdb_data
+      

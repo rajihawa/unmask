@@ -11,8 +11,8 @@ type ProjectRepository struct {
 	sess *r.Session
 }
 
-// NewRethinkProjectRepository will create an object that represent the project.Repository interface
-func NewRethinkProjectRepository() domain.ProjectRepository {
+// NewProjectRepository will create an object that represent the project.Repository interface
+func NewProjectRepository() domain.ProjectRepository {
 	return &ProjectRepository{
 		db:   r.Table(utils.ProjectsTableName),
 		sess: utils.Session,
@@ -34,6 +34,21 @@ func (p *ProjectRepository) GetAll() ([]domain.Project, error) {
 	}
 
 	return projects, nil
+}
+func (p *ProjectRepository) Get(id string) (*domain.Project, error) {
+	cur, err := p.db.Get(id).Run(p.sess)
+	if err != nil {
+		return nil, err
+	}
+
+	var project domain.Project
+
+	err = cur.One(&project)
+	if err != nil {
+		return nil, err
+	}
+
+	return &project, nil
 }
 
 func (p *ProjectRepository) Insert(project domain.Project) error {

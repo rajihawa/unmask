@@ -23,7 +23,7 @@ func CreateProject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = usecases.NewRethinkProjectUsecase(repository.NewRethinkProjectRepository()).CreateProject(project)
+	err = usecases.NewProjectUsecase(repository.NewProjectRepository()).CreateProject(project)
 	if err != nil {
 		utils.HttpError(w, err, http.StatusBadRequest, "Couldn't create project.")
 		return
@@ -33,7 +33,7 @@ func CreateProject(w http.ResponseWriter, r *http.Request) {
 
 func GetAllProjects(w http.ResponseWriter, r *http.Request) {
 
-	projects, err := usecases.NewRethinkProjectUsecase(repository.NewRethinkProjectRepository()).GetAll()
+	projects, err := usecases.NewProjectUsecase(repository.NewProjectRepository()).GetAll()
 	if err != nil {
 		utils.HttpError(w, err, http.StatusBadRequest, "Couldn't get projects.")
 		return

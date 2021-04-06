@@ -5,5 +5,6 @@ go 1.16
 require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/gorilla/mux v1.8.0
+	github.com/rs/xid v1.3.0 // indirect
 	gopkg.in/rethinkdb/rethinkdb-go.v6 v6.2.1 // indirect
 )
