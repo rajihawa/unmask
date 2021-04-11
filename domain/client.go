@@ -10,8 +10,8 @@ type Client struct {
 	CallbackURL  string    `json:"callback_url" rethinkdb:"callback_url"`
 	Frontend     bool      `json:"frontend" rethinkdb:"frontend"`
 	Signup       bool      `json:"signup" rethinkdb:"signup"`
-	ClientID     string    `json:"client_id" rethinkdb:"client_id"`
-	ClientSecret string    `json:"-" rethinkdb:"client_secret,omitempty"`
+	Disabled     bool      `json:"disabled" rethinkdb:"disabled"`
+	ClientSecret string    `json:"-" rethinkdb:"client_secret"`
 	UpdatedAt    time.Time `json:"-" rethinkdb:"updated_at"`
 	CreatedAt    time.Time `json:"-" rethinkdb:"created_at"`
 	Project      *Project  `json:"project,omitempty" rethinkdb:"project_id,reference" rethinkdb_ref:"id"`
@@ -25,10 +25,12 @@ type ClientRepository interface {
 	GetAll(projectID string, opts GetClientOpts) ([]Client, error)
 	Insert(client Client) error
 	GetClientSecret(clientID string) (string, error)
+	Get(clientID string, opts GetClientOpts) (*Client, error)
 }
 
 type ClientUsecases interface {
 	GetAll(project Project, opts GetClientOpts) ([]Client, error)
 	CreateClient(newClient *Client) error
 	GetClientSecret(clientID string) (string, error)
+	GetClient(clientID string, opts GetClientOpts) (*Client, error)
 }

@@ -12,6 +12,7 @@ func ProjectRouter(router *mux.Router) {
 	authSubRouter.Use(middlewares.AdminMiddleware)
 
 	authSubRouter.HandleFunc("", handlers.GetAllProjects).Methods("GET")
+	authSubRouter.HandleFunc("/{project}", handlers.GetProject).Methods("GET")
 
 	authSubRouter.HandleFunc("", handlers.CreateProject).Methods("POST")
 }

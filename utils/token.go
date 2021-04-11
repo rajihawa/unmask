@@ -29,23 +29,23 @@ func CreateToken(claims jwt.MapClaims) (string, string, int, error) {
 	return tokenString, "", http.StatusOK, nil
 }
 
-func ValidateToken(token string) (string, int, error) {
+func ValidateToken(token string) (jwt.MapClaims, string, int, error) {
 	claims := jwt.MapClaims{}
 	_, err := jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
 		return JwtSigningKey, nil
 	})
 	if err != nil {
-		return "Cant validate token.", http.StatusInternalServerError, err
+		return nil, "Cant validate token.", http.StatusInternalServerError, err
 	}
 	exp, err := strconv.ParseInt(fmt.Sprintf("%v", claims["exp"]), 10, 64)
 	if err != nil {
-		return "Cant parse expiration date.", http.StatusInternalServerError, err
+		return nil, "Cant parse expiration date.", http.StatusInternalServerError, err
 	}
 	currTime := time.Now().Unix()
 
 	if currTime > exp {
 		var emptyErr error
-		return "Token expired.", http.StatusUnauthorized, emptyErr
+		return nil, "Token expired.", http.StatusUnauthorized, emptyErr
 	}
-	return "", http.StatusOK, nil
+	return claims, "", http.StatusOK, nil
 }

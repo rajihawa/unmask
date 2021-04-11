@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	"github.com/rajihawa/unmask/app/repository"
 	"github.com/rajihawa/unmask/app/usecases"
 	"github.com/rajihawa/unmask/domain"
@@ -33,7 +34,18 @@ func CreateProject(w http.ResponseWriter, r *http.Request) {
 
 func GetAllProjects(w http.ResponseWriter, r *http.Request) {
 
-	projects, err := usecases.NewProjectUsecase(repository.NewProjectRepository()).GetAll()
+	projects, err := usecases.NewProjectUsecase(repository.NewProjectRepository()).GetAll(domain.GetProjectOpts{})
+	if err != nil {
+		utils.HttpError(w, err, http.StatusBadRequest, "Couldn't get projects.")
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(projects)
+}
+func GetProject(w http.ResponseWriter, r *http.Request) {
+	projectID := mux.Vars(r)["project"]
+
+	projects, err := usecases.NewProjectUsecase(repository.NewProjectRepository()).GetProject(projectID, domain.GetProjectOpts{})
 	if err != nil {
 		utils.HttpError(w, err, http.StatusBadRequest, "Couldn't get projects.")
 		return

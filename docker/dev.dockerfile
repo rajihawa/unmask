@@ -6,8 +6,9 @@ RUN apk add --update tzdata \
 # Install fresh that brings reload functionality
 RUN go get github.com/pilu/fresh
 RUN go get -u -v github.com/dgrijalva/jwt-go
-RUN go get -v gopkg.in/rethinkdb/rethinkdb-go.v6
+RUN go get -u -v gopkg.in/rethinkdb/rethinkdb-go.v6
 RUN go get -v github.com/rs/xid
+RUN go get -u -v golang.org/x/crypto/bcrypt
 
 ARG PORT
 ENV PORT=$PORT

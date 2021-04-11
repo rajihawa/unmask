@@ -19,8 +19,33 @@ func NewProjectRepository() domain.ProjectRepository {
 	}
 }
 
-func (p *ProjectRepository) GetAll() ([]domain.Project, error) {
-	cur, err := p.db.Run(p.sess)
+func filterProjectOpts(baseTerm r.Term, opts domain.GetProjectOpts) (term r.Term) {
+	term = baseTerm
+	// if opts.GetClients {
+	// 	term = term.Merge(func(p r.Term) interface{} {
+	// 		return map[string]interface{}{
+	// 			"client_ids": r.Table(utils.ClientsTableName).GetAll(r.Args(p.Field("client_ids"))).CoerceTo("array"),
+	// 		}
+	// 	})
+	// } else {
+	// 	term = term.Without("client_id")
+	// }
+	// if opts.GetUsers {
+	// 	term = term.Merge(func(p r.Term) interface{} {
+	// 		return map[string]interface{}{
+	// 			"user_ids": r.Table(utils.UsersTableName).GetAll(r.Args(p.Field("user_ids"))).CoerceTo("array"),
+	// 		}
+	// 	})
+	// } else {
+	// 	term = term.Without("project_id")
+	// }
+	return
+}
+
+func (p *ProjectRepository) GetAll(opts domain.GetProjectOpts) ([]domain.Project, error) {
+	term := p.db
+	term = filterProjectOpts(term, opts)
+	cur, err := term.Run(p.sess)
 	if err != nil {
 		return nil, err
 	}
@@ -28,15 +53,16 @@ func (p *ProjectRepository) GetAll() ([]domain.Project, error) {
 	var projects []domain.Project
 
 	err = cur.All(&projects)
-	defer cur.Close()
 	if err != nil {
 		return nil, err
 	}
 
 	return projects, nil
 }
-func (p *ProjectRepository) Get(id string) (*domain.Project, error) {
-	cur, err := p.db.Get(id).Run(p.sess)
+func (p *ProjectRepository) Get(id string, opts domain.GetProjectOpts) (*domain.Project, error) {
+	term := p.db.Get(id)
+	term = filterProjectOpts(term, opts)
+	cur, err := term.Run(p.sess)
 	if err != nil {
 		return nil, err
 	}
@@ -57,4 +83,10 @@ func (p *ProjectRepository) Insert(project domain.Project) error {
 		return err
 	}
 	return nil
+}
+
+func (p *ProjectRepository) SetUserCount(projectID string, newCount int) error {
+	return p.db.Get(projectID).Update(map[string]interface{}{
+		"users_count": newCount,
+	}).Exec(p.sess)
 }

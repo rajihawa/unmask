@@ -8,7 +8,9 @@ import (
 )
 
 var (
-	jwtCookieName = "qid"
+	AdminTokenCookieName  = "qid"
+	AccessTokenCookieName = "access_token"
+	IdTokenCookieName     = "id_token"
 )
 
 type CookieManager struct {
@@ -19,8 +21,8 @@ func (c *CookieManager) SetCookie(w http.ResponseWriter) {
 	http.SetCookie(w, c.Cookie)
 }
 
-func GetCookie(r *http.Request) (*CookieManager, error) {
-	cookie, err := r.Cookie(jwtCookieName)
+func GetCookie(name string, r *http.Request) (*CookieManager, error) {
+	cookie, err := r.Cookie(name)
 	if err != nil {
 		return nil, err
 	}
@@ -44,6 +46,6 @@ func CreateCookie(name string, value string, exp time.Time) *CookieManager {
 	}
 }
 
-func CreateJwtCookie(value string, exp time.Time) *CookieManager {
-	return CreateCookie(jwtCookieName, value, exp)
+func CreateJwtCookie(name string, value string, exp time.Time) *CookieManager {
+	return CreateCookie(name, value, exp)
 }

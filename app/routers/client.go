@@ -8,6 +8,7 @@ import (
 
 func ClientRouter(router *mux.Router) {
 	subRouter := router.PathPrefix("/{project}/clients").Subrouter()
+	subRouter.Use(middlewares.ProjectMiddleware)
 	authSubRouter := subRouter.NewRoute().Subrouter()
 	authSubRouter.Use(middlewares.AdminMiddleware)
 

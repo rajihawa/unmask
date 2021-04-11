@@ -17,6 +17,7 @@ var (
 	Session           *r.Session
 	ProjectsTableName = "projects"
 	ClientsTableName  = "clients"
+	UsersTableName    = "users"
 	tables            = map[string](r.TableCreateOpts){
 		ProjectsTableName: r.TableCreateOpts{
 			PrimaryKey: "id",
@@ -24,9 +25,13 @@ var (
 		ClientsTableName: r.TableCreateOpts{
 			PrimaryKey: "id",
 		},
+		UsersTableName: r.TableCreateOpts{
+			PrimaryKey: "id",
+		},
 	}
-	indexes = map[string](string){
-		ClientsTableName: "project_id",
+	indexes = map[string]([]string){
+		ClientsTableName: {"project_id"},
+		UsersTableName:   {"project_id", "username"},
 	}
 )
 
@@ -50,10 +55,12 @@ func InitDatabase() {
 			log.Fatalln(err)
 		}
 	}
-	for tableName, indexName := range indexes {
-		err = r.Table(tableName).IndexCreate(indexName).Exec(session)
-		if err != nil && !strings.Contains(err.Error(), "already exists") {
-			log.Fatalln(err)
+	for tableName, indexNames := range indexes {
+		for _, indexName := range indexNames {
+			err = r.Table(tableName).IndexCreate(indexName).Exec(session)
+			if err != nil && !strings.Contains(err.Error(), "already exists") {
+				log.Fatalln(err)
+			}
 		}
 	}
 

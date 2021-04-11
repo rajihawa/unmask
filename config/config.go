@@ -17,3 +17,11 @@ func getEnvBool(env string) bool {
 func AdminTokenExpire() time.Time {
 	return time.Now().Add(time.Minute * 60)
 }
+
+func AccessTokenExpire() time.Time {
+	return time.Now().Add(time.Hour * 24 * 60)
+}
+
+func IdTokenExpire() time.Time {
+	return time.Now().Add(time.Hour * 24 * 365)
+}

@@ -39,12 +39,37 @@ func (c *ClientRepository) GetAll(projectID string, opts domain.GetClientOpts) (
 	var clients []domain.Client
 
 	err = cur.All(&clients)
-	defer cur.Close()
 	if err != nil {
 		return nil, err
 	}
 
 	return clients, nil
+}
+func (c *ClientRepository) Get(clientID string, opts domain.GetClientOpts) (*domain.Client, error) {
+	term := c.db.Get(clientID).Without("client_secret")
+	if opts.GetProjects {
+		term = term.Merge(func(p r.Term) interface{} {
+			return map[string]interface{}{
+				"project_id": r.Table(utils.ProjectsTableName).Get(p.Field("project_id")),
+			}
+		})
+	} else {
+		term = term.Without("project_id")
+	}
+
+	cur, err := term.Run(c.sess)
+	if err != nil {
+		return nil, err
+	}
+
+	var client domain.Client
+
+	err = cur.One(&client)
+	if err != nil {
+		return nil, err
+	}
+
+	return &client, nil
 }
 
 func (c *ClientRepository) Insert(client domain.Client) error {

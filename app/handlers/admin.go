@@ -56,7 +56,7 @@ func AdminLoginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	cookieMgr := utils.CreateJwtCookie(tokenString, exp)
+	cookieMgr := utils.CreateJwtCookie(utils.AdminTokenCookieName, tokenString, exp)
 	cookieMgr.SetCookie(w)
 
 	fmt.Fprintf(w, "Person: %+v,\nJWT: %s\n", loginData, tokenString)
