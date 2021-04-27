@@ -21,8 +21,8 @@ func (uu *UsersUsecases) GetAll(client domain.Client, opts domain.GetUsersOpts) 
 	return uu.repo.GetAll(client.Project.ID, opts)
 }
 
-func (uu *UsersUsecases) GetUser(id string, client domain.Client, opts domain.GetUsersOpts) (*domain.User, error) {
-	return uu.repo.Get(id, client.Project.ID, opts)
+func (uu *UsersUsecases) GetUser(id string, opts domain.GetUsersOpts) (*domain.User, error) {
+	return uu.repo.Get(id, opts)
 }
 
 func (uu *UsersUsecases) CheckUserLogin(userLogin domain.UserLogin, client domain.Client) (*domain.User, error) {

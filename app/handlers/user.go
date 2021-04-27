@@ -105,6 +105,11 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 }
+
+func GetAllUsers(w http.ResponseWriter, r *http.Request) {
+
+}
+
 func CurrentUser(w http.ResponseWriter, r *http.Request) {
 	user := r.Context().Value(utils.ContextUserKey).(domain.User)
 

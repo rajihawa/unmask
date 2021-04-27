@@ -1,8 +1,7 @@
-package utils
+package database
 
 import (
 	"log"
-	"os"
 	"strings"
 	"time"
 
@@ -10,10 +9,6 @@ import (
 )
 
 var (
-	databaseUrl       = os.Getenv("DATABASE_URL")
-	databaseName      = "unmask"
-	databaseUsername  = os.Getenv("DATABASE_USERNAME")
-	databasePassword  = os.Getenv("DATABASE_PASSWORD")
 	Session           *r.Session
 	ProjectsTableName = "projects"
 	ClientsTableName  = "clients"
@@ -35,12 +30,28 @@ var (
 	}
 )
 
-func InitDatabase() {
+func ResetDatabase() {
+	for tableName, tableOpts := range tables {
+		err := r.TableDrop(tableName, tableOpts).Exec(Session)
+		if err != nil && !strings.Contains(err.Error(), "exists") {
+			log.Fatalln(err)
+		}
+	}
+}
+
+type RethinkConfig struct {
+	DatabaseURL      string
+	DatabaseName     string
+	DatabaseUsername string
+	DatabasePassword string
+}
+
+func InitRethinkSession(conf RethinkConfig) {
 	session, err := r.Connect(r.ConnectOpts{
-		Address:      databaseUrl,
-		Database:     databaseName,
-		Username:     databaseUsername,
-		Password:     databasePassword,
+		Address:      conf.DatabaseURL,
+		Database:     conf.DatabaseName,
+		Username:     conf.DatabaseUsername,
+		Password:     conf.DatabasePassword,
 		WriteTimeout: 3 * time.Second,
 		ReadTimeout:  3 * time.Second,
 		Timeout:      3 * time.Second,
@@ -48,22 +59,23 @@ func InitDatabase() {
 	if err != nil {
 		log.Fatalln(err)
 	}
+	Session = session
+}
+
+func InitDatabase() {
 
 	for tableName, tableOpts := range tables {
-		err = r.TableCreate(tableName, tableOpts).Exec(session)
+		err := r.TableCreate(tableName, tableOpts).Exec(Session)
 		if err != nil && !strings.Contains(err.Error(), "already exists") {
 			log.Fatalln(err)
 		}
 	}
 	for tableName, indexNames := range indexes {
 		for _, indexName := range indexNames {
-			err = r.Table(tableName).IndexCreate(indexName).Exec(session)
+			err := r.Table(tableName).IndexCreate(indexName).Exec(Session)
 			if err != nil && !strings.Contains(err.Error(), "already exists") {
 				log.Fatalln(err)
 			}
 		}
 	}
-
-	Session = session
-
 }

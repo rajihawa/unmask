@@ -3,7 +3,7 @@ services:
   server:
     build:
       context: .
-      dockerfile: docker/dev.dockerfile
+      dockerfile: docker/test.dockerfile
       args:
         - PORT=4000
     ports:
@@ -15,12 +15,16 @@ services:
       - PRODUCTION=false
       - DATABASE_URL=database:28015
       - DATABASE_USERNAME=unmask_user
+      - DATABASE_NAME=unmask
       - DATABASE_PASSWORD=unmask@123
       - AES_KEY=655368566D597133743677397A24432646294A404E635166546A576E5A723475
     working_dir: /app
     volumes:
       - ./:/app
       - /app/tmp
+      - /app/web
+      - ./web/dist:/app/web/dist
+
   database:
     image: rethinkdb:2.4.1-buster-slim
     ports:
@@ -29,4 +33,3 @@ services:
     working_dir: /data
     volumes:
       - ./rethink_data/:/data/rethinkdb_data
-      

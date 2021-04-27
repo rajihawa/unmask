@@ -27,7 +27,7 @@ type GetUsersOpts struct {
 // UserstUsecases - the users' repository
 type UsersRepository interface {
 	GetAll(projectID string, opts GetUsersOpts) ([]User, error)
-	Get(id string, projectID string, opts GetUsersOpts) (*User, error)
+	Get(id string, opts GetUsersOpts) (*User, error)
 	Insert(user User) error
 	GetByUsername(username string, projectID string, opts GetUsersOpts) ([]User, error)
 }
@@ -35,7 +35,7 @@ type UsersRepository interface {
 // UserstUsecases - the users' usecases
 type UsersUsecases interface {
 	GetAll(client Client, opts GetUsersOpts) ([]User, error)
-	GetUser(id string, client Client, opts GetUsersOpts) (*User, error)
+	GetUser(id string, opts GetUsersOpts) (*User, error)
 	SignupUser(client Client, user *User) error
 	CheckUserLogin(userLogin UserLogin, client Client) (*User, error)
 }

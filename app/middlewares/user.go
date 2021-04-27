@@ -2,7 +2,6 @@ package middlewares
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 
 	"github.com/rajihawa/unmask/app/repository"
@@ -24,12 +23,10 @@ func UserMiddleware(next http.Handler) http.Handler {
 			utils.HttpError(w, err, errCode, errMsg)
 			return
 		}
-		fmt.Println(claims)
 
-		client := r.Context().Value(utils.ContextClientKey).(domain.Client)
 		userID := claims["user_id"].(string)
 
-		user, err := usecases.NewUsersUsecase(repository.NewUsersRepository()).GetUser(userID, client, domain.GetUsersOpts{})
+		user, err := usecases.NewUsersUsecase(repository.NewUsersRepository()).GetUser(userID, domain.GetUsersOpts{})
 		if err != nil {
 			utils.HttpError(w, err, http.StatusBadRequest, "Can't get user.")
 			return

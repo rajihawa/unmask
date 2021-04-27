@@ -22,6 +22,10 @@ func AccessTokenExpire() time.Time {
 	return time.Now().Add(time.Hour * 24 * 60)
 }
 
-func IdTokenExpire() time.Time {
+func RefreshTokenExpire() time.Time {
 	return time.Now().Add(time.Hour * 24 * 365)
+}
+
+func AuthTokenExpire() time.Time {
+	return time.Now().Add(time.Minute * 5)
 }

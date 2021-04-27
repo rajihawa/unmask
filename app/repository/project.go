@@ -1,8 +1,8 @@
 package repository
 
 import (
+	"github.com/rajihawa/unmask/app/database"
 	"github.com/rajihawa/unmask/domain"
-	"github.com/rajihawa/unmask/utils"
 	r "gopkg.in/rethinkdb/rethinkdb-go.v6"
 )
 
@@ -14,8 +14,8 @@ type ProjectRepository struct {
 // NewProjectRepository will create an object that represent the project.Repository interface
 func NewProjectRepository() domain.ProjectRepository {
 	return &ProjectRepository{
-		db:   r.Table(utils.ProjectsTableName),
-		sess: utils.Session,
+		db:   r.Table(database.ProjectsTableName),
+		sess: database.Session,
 	}
 }
 

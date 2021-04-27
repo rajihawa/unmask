@@ -2,6 +2,7 @@ package usecases
 
 import (
 	"crypto/sha256"
+	"errors"
 	"fmt"
 
 	"github.com/rajihawa/unmask/domain"
@@ -24,7 +25,11 @@ func (cu *ClientUsecases) GetAll(project domain.Project, opts domain.GetClientOp
 }
 
 func (cu *ClientUsecases) GetClient(clientID string, opts domain.GetClientOpts) (*domain.Client, error) {
-	return cu.repo.Get(clientID, opts)
+	client, err := cu.repo.Get(clientID, opts)
+	if client.Disabled {
+		return nil, errors.New("client is disabled")
+	}
+	return client, err
 }
 
 func (cu *ClientUsecases) CreateClient(newClient *domain.Client) error {

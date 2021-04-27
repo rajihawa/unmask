@@ -11,7 +11,7 @@ type Client struct {
 	Frontend     bool      `json:"frontend" rethinkdb:"frontend"`
 	Signup       bool      `json:"signup" rethinkdb:"signup"`
 	Disabled     bool      `json:"disabled" rethinkdb:"disabled"`
-	ClientSecret string    `json:"-" rethinkdb:"client_secret"`
+	ClientSecret string    `json:"-" rethinkdb:"client_secret,omitempty"`
 	UpdatedAt    time.Time `json:"-" rethinkdb:"updated_at"`
 	CreatedAt    time.Time `json:"-" rethinkdb:"created_at"`
 	Project      *Project  `json:"project,omitempty" rethinkdb:"project_id,reference" rethinkdb_ref:"id"`

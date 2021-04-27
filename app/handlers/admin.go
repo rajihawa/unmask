@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -37,7 +38,7 @@ func AdminLoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Validate username and password
 	if loginData.Username != adminUsername || loginData.Password != adminPassword {
-		utils.HttpError(w, err, http.StatusUnauthorized, "Username or Password doesn't match.")
+		utils.HttpError(w, errors.New("username or password incorrect"), http.StatusUnauthorized, "Username or Password doesn't match.")
 		return
 	}
 
@@ -49,17 +50,13 @@ func AdminLoginHandler(w http.ResponseWriter, r *http.Request) {
 	claims["authorized"] = true
 	claims["exp"] = fmt.Sprintf("%d", exp.Unix())
 
-	tokenString, errMsg, errCode, err := utils.CreateToken(claims)
+	// tokenString, errMsg, errCode, err := utils.CreateToken(claims)
+	token := utils.GenerateToken(claims)
 
-	if err != nil {
-		utils.HttpError(w, err, errCode, errMsg)
-		return
-	}
-
-	cookieMgr := utils.CreateJwtCookie(utils.AdminTokenCookieName, tokenString, exp)
+	cookieMgr := utils.CreateJwtCookie(utils.AdminTokenCookieName, token, exp)
 	cookieMgr.SetCookie(w)
 
-	fmt.Fprintf(w, "Person: %+v,\nJWT: %s\n", loginData, tokenString)
+	// fmt.Fprintf(w, "Person: %+v,\nJWT: %s\n", loginData, tokenString)
 }
 
 func AdminMeHandler(w http.ResponseWriter, r *http.Request) {

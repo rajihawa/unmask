@@ -5,6 +5,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/rajihawa/unmask/app"
+	"github.com/rajihawa/unmask/app/database"
 	"github.com/rajihawa/unmask/app/handlers"
 )
 
@@ -12,7 +14,7 @@ import (
 func TestHealthEndpoint(t *testing.T) {
 	// Create a request to pass to our handler. We don't have any query parameters for now, so we'll
 	// pass 'nil' as the third parameter.
-	req, err := http.NewRequest("GET", "/health", nil)
+	req, err := http.NewRequest("GET", "/api/health", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -32,9 +34,21 @@ func TestHealthEndpoint(t *testing.T) {
 	}
 
 	// Check the response body is what we expect.
-	expected := `{"alive": truee}`
+	expected := "{\"healthy\":true}\n"
 	if rr.Body.String() != expected {
 		t.Errorf("handler returned unexpected body: got %v want %v",
 			rr.Body.String(), expected)
 	}
+}
+
+func TestProjectsEndpoint(t *testing.T) {
+	app.StartApp(app.AppConfig{
+		Port: "4000",
+		RethinkDB: database.RethinkConfig{
+			DatabaseURL:      "localhost",
+			DatabaseName:     "unmask_test",
+			DatabaseUsername: "unmask_test",
+			DatabasePassword: "",
+		},
+	})
 }

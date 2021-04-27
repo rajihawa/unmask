@@ -1,8 +1,10 @@
 package repository
 
 import (
+	"errors"
+
+	"github.com/rajihawa/unmask/app/database"
 	"github.com/rajihawa/unmask/domain"
-	"github.com/rajihawa/unmask/utils"
 	r "gopkg.in/rethinkdb/rethinkdb-go.v6"
 )
 
@@ -14,8 +16,8 @@ type ClientRepository struct {
 // NewRethinkProjectRepository will create an object that represent the project.Repository interface
 func NewClientRepository() domain.ClientRepository {
 	return &ClientRepository{
-		db:   r.Table(utils.ClientsTableName),
-		sess: utils.Session,
+		db:   r.Table(database.ClientsTableName),
+		sess: database.Session,
 	}
 }
 
@@ -24,7 +26,7 @@ func (c *ClientRepository) GetAll(projectID string, opts domain.GetClientOpts) (
 	if opts.GetProjects {
 		term = term.Merge(func(p r.Term) interface{} {
 			return map[string]interface{}{
-				"project_id": r.Table(utils.ProjectsTableName).Get(p.Field("project_id")),
+				"project_id": r.Table(database.ProjectsTableName).Get(p.Field("project_id")),
 			}
 		})
 	} else {
@@ -46,11 +48,12 @@ func (c *ClientRepository) GetAll(projectID string, opts domain.GetClientOpts) (
 	return clients, nil
 }
 func (c *ClientRepository) Get(clientID string, opts domain.GetClientOpts) (*domain.Client, error) {
+
 	term := c.db.Get(clientID).Without("client_secret")
 	if opts.GetProjects {
 		term = term.Merge(func(p r.Term) interface{} {
 			return map[string]interface{}{
-				"project_id": r.Table(utils.ProjectsTableName).Get(p.Field("project_id")),
+				"project_id": r.Table(database.ProjectsTableName).Get(p.Field("project_id")),
 			}
 		})
 	} else {
@@ -58,7 +61,12 @@ func (c *ClientRepository) Get(clientID string, opts domain.GetClientOpts) (*dom
 	}
 
 	cur, err := term.Run(c.sess)
+
+	if err == r.ErrEmptyResult {
+		return nil, errors.New("client does not exist")
+	}
 	if err != nil {
+
 		return nil, err
 	}
 
@@ -66,6 +74,7 @@ func (c *ClientRepository) Get(clientID string, opts domain.GetClientOpts) (*dom
 
 	err = cur.One(&client)
 	if err != nil {
+
 		return nil, err
 	}
 
