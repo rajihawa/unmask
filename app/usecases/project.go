@@ -1,4 +1,4 @@
-package usecase
+package usecases
 
 import "github.com/rajihawa/unmask/domain"
 
