@@ -10,11 +10,11 @@ type AppConfig struct {
 }
 
 type App struct {
-	project domain.ProjectUsecases
+	Project domain.ProjectUsecases
 }
 
-func StartApp(conf AppConfig) App {
+func InitApp(conf AppConfig) App {
 	return App{
-		project: usecases.NewProjectUsecases(repository.NewProjectRepo()),
+		Project: usecases.NewProjectUsecases(repository.NewProjectRepo()),
 	}
 }
