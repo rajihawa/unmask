@@ -4,10 +4,13 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"os"
+	"path"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/golang-migrate/migrate"
 	"github.com/golang-migrate/migrate/database/mysql"
+	_ "github.com/golang-migrate/migrate/source/file"
 	"github.com/rajihawa/unmask/app/domain"
 	"github.com/rajihawa/unmask/app/repository"
 	usecases "github.com/rajihawa/unmask/app/usecases"
@@ -42,7 +45,14 @@ func InitApp(conf AppConfig) App {
 		log.Println("Error while getting driver instance.")
 		panic(err)
 	}
-	m, err := migrate.NewWithDatabaseInstance("file///migrations", conf.DB.Driver, driver)
+
+	pwd, err := os.Getwd()
+	if err != nil {
+		log.Println("Error while getting current path")
+		panic(err)
+	}
+	migrationsPath := path.Join(path.Dir(pwd), "../")
+	m, err := migrate.NewWithDatabaseInstance(fmt.Sprintf("file://%s/migrations", migrationsPath), conf.DB.Driver, driver)
 	if err != nil {
 		log.Println("Error while getting migration instance.")
 		panic(err)

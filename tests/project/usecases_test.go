@@ -8,7 +8,14 @@ import (
 )
 
 func TestProjectUsecases(t *testing.T) {
-	app := app.InitApp(app.AppConfig{})
+	app := app.InitApp(app.AppConfig{DB: app.DatabaseConfig{
+		Driver:   "mysql",
+		Host:     "localhost",
+		Database: "db",
+		Port:     "3306",
+		Username: "user",
+		Password: "password",
+	}})
 
 	project := &domain.Project{
 		Name:        "test project",
