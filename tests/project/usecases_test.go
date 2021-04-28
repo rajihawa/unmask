@@ -8,7 +8,7 @@ import (
 )
 
 func TestProjectUsecases(t *testing.T) {
-	app := app.InitApp(app.AppConfig{DB: app.DatabaseConfig{
+	app := app.InitApp(app.AppConfig{DB: domain.DatabaseConfig{
 		Driver:   "mysql",
 		Host:     "localhost",
 		Database: "db",
