@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"path"
+	"strings"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/golang-migrate/migrate"
@@ -14,9 +15,12 @@ import (
 	"github.com/rajihawa/unmask/app/domain"
 )
 
+var (
+	MySQL *sql.DB
+)
+
 type MySqlDB struct {
 	Config    domain.DatabaseConfig
-	DB        *sql.DB
 	Migration *migrate.Migrate
 }
 
@@ -33,7 +37,7 @@ func (mdb *MySqlDB) Init() {
 		log.Println("Error while opening connection with mysql database.")
 		panic(err)
 	}
-	mdb.DB = db
+	MySQL = db
 	driver, err := mysql.WithInstance(db, &mysql.Config{})
 	if err != nil {
 		log.Println("Error while getting driver instance.")
@@ -53,7 +57,7 @@ func (mdb *MySqlDB) Init() {
 	}
 	mdb.Migration = m
 	err = m.Up()
-	if err != nil {
+	if err != nil && !strings.Contains(err.Error(), "no change") {
 		log.Println("Error while migrating up.")
 		panic(err)
 	}
@@ -67,5 +71,5 @@ func (mdb *MySqlDB) Clear() {
 	}
 }
 func (mdb *MySqlDB) Close() {
-	mdb.DB.Close()
+	// mdb.DB.Close()
 }

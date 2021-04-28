@@ -10,11 +10,14 @@ import (
 )
 
 type AppConfig struct {
-	DB domain.DatabaseConfig
+	DB  domain.DatabaseConfig
+	Env string
 }
 
 type App struct {
 	Project domain.ProjectUsecases
+	Env     string
+	DB      domain.Database
 }
 
 func InitApp(conf AppConfig) App {
@@ -22,10 +25,19 @@ func InitApp(conf AppConfig) App {
 	if conf.DB.Driver == "mysql" {
 		db = data.NewMySqlDB(conf.DB)
 		db.Init()
-		defer db.Close()
+
 		return App{
-			Project: usecases.NewProjectUsecases(repository.NewProjectMySqlRepo(conf.DB)),
+			Project: usecases.NewProjectUsecases(repository.NewProjectMySqlRepo()),
+			Env:     conf.Env,
+			DB:      db,
 		}
 	}
 	return App{}
+}
+
+func (a *App) Close() {
+	if a.Env == "testing" {
+		a.DB.Clear()
+	}
+	a.DB.Close()
 }

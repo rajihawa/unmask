@@ -1,6 +1,7 @@
 package project_test
 
 import (
+	"log"
 	"testing"
 
 	"github.com/rajihawa/unmask/app"
@@ -15,18 +16,21 @@ func TestProjectUsecases(t *testing.T) {
 		Port:     "3306",
 		Username: "user",
 		Password: "password",
-	}})
+	},
+		Env: "testing"})
+	defer app.Close()
 
 	project := &domain.Project{
 		Name:        "test project",
 		Description: "test description of project",
 	}
-
+	log.Println("Testing CreateProject")
 	err := app.Project.CreateProject(*project)
 	if err != nil {
 		t.Errorf("Failed to create project %+v", err)
 	}
 
+	log.Println("Testing GetProjects")
 	projects, err := app.Project.GetProjects(10, 0)
 	if err != nil {
 		t.Errorf("Failed to get projects %+v", err)
@@ -40,11 +44,13 @@ func TestProjectUsecases(t *testing.T) {
 	newProject := createdProject
 	newProject.Name = "updated test project"
 
+	log.Println("Testing UpdateProject")
 	err = app.Project.UpdateProject(createdProject.ID, newProject)
 	if err != nil {
 		t.Errorf("Failed to update project %+v", err)
 	}
 
+	log.Println("Testing GetProject")
 	fetchedProject, err := app.Project.GetProject(createdProject.ID)
 	if err != nil {
 		t.Errorf("Failed to get project %s, %+v", createdProject.ID, err)
@@ -53,6 +59,7 @@ func TestProjectUsecases(t *testing.T) {
 		t.Errorf("Project name expected %s but got %s", newProject.Name, fetchedProject.Name)
 	}
 
+	log.Println("Testing DeleteProject")
 	err = app.Project.DeleteProject(fetchedProject.ID)
 	if err != nil {
 		t.Errorf("Failed to delete project %s, %+v", fetchedProject.ID, err)

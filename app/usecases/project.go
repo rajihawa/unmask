@@ -1,6 +1,9 @@
 package usecases
 
-import "github.com/rajihawa/unmask/app/domain"
+import (
+	"github.com/google/uuid"
+	"github.com/rajihawa/unmask/app/domain"
+)
 
 type ProjectUsecases struct {
 	repo domain.ProjectRepo
@@ -12,21 +15,27 @@ func NewProjectUsecases(repo domain.ProjectRepo) domain.ProjectUsecases {
 	}
 }
 func (u *ProjectUsecases) GetProject(id string) (*domain.Project, error) {
-	panic("not implemented") // TODO: Implement
+	return u.repo.GetOne(id)
 }
 
 func (u *ProjectUsecases) GetProjects(limit int, offset int) ([]domain.Project, error) {
-	panic("not implemented") // TODO: Implement
+	return u.repo.GetAll(limit, offset)
 }
 
 func (u *ProjectUsecases) UpdateProject(id string, newProject domain.Project) error {
-	panic("not implemented") // TODO: Implement
+	return u.repo.UpdateOne(id, newProject)
 }
 
 func (u *ProjectUsecases) CreateProject(newProject domain.Project) error {
-	panic("not implemented") // TODO: Implement
+	id := uuid.New().String()
+	project := domain.Project{
+		ID:          id,
+		Name:        newProject.Name,
+		Description: newProject.Description,
+	}
+	return u.repo.CreateOne(project)
 }
 
 func (u *ProjectUsecases) DeleteProject(id string) error {
-	panic("not implemented") // TODO: Implement
+	return u.repo.DeleteOne(id)
 }
