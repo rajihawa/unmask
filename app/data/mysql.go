@@ -15,25 +15,25 @@ import (
 )
 
 type MySqlDB struct {
-	config    domain.DatabaseConfig
-	db        *sql.DB
-	migration *migrate.Migrate
+	Config    domain.DatabaseConfig
+	DB        *sql.DB
+	Migration *migrate.Migrate
 }
 
-func NewMySqlDB(conf domain.DatabaseConfig) domain.Database {
+func NewMySqlDB(conf domain.DatabaseConfig) *MySqlDB {
 	return &MySqlDB{
-		config: conf,
+		Config: conf,
 	}
 }
 
 func (mdb *MySqlDB) Init() {
-	url := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", mdb.config.Username, mdb.config.Password, mdb.config.Host, mdb.config.Port, mdb.config.Database)
-	db, err := sql.Open(mdb.config.Driver, url)
+	url := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", mdb.Config.Username, mdb.Config.Password, mdb.Config.Host, mdb.Config.Port, mdb.Config.Database)
+	db, err := sql.Open(mdb.Config.Driver, url)
 	if err != nil {
 		log.Println("Error while opening connection with mysql database.")
 		panic(err)
 	}
-	mdb.db = db
+	mdb.DB = db
 	driver, err := mysql.WithInstance(db, &mysql.Config{})
 	if err != nil {
 		log.Println("Error while getting driver instance.")
@@ -46,12 +46,12 @@ func (mdb *MySqlDB) Init() {
 		panic(err)
 	}
 	migrationsPath := path.Join(path.Dir(pwd), "../")
-	m, err := migrate.NewWithDatabaseInstance(fmt.Sprintf("file://%s/migrations", migrationsPath), mdb.config.Driver, driver)
+	m, err := migrate.NewWithDatabaseInstance(fmt.Sprintf("file://%s/migrations", migrationsPath), mdb.Config.Driver, driver)
 	if err != nil {
 		log.Println("Error while getting migration instance.")
 		panic(err)
 	}
-	mdb.migration = m
+	mdb.Migration = m
 	err = m.Up()
 	if err != nil {
 		log.Println("Error while migrating up.")
@@ -60,9 +60,12 @@ func (mdb *MySqlDB) Init() {
 }
 
 func (mdb *MySqlDB) Clear() {
-	err := mdb.migration.Down()
+	err := mdb.Migration.Down()
 	if err != nil {
 		log.Println("Error while migrating up.")
 		panic(err)
 	}
+}
+func (mdb *MySqlDB) Close() {
+	mdb.DB.Close()
 }

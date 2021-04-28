@@ -21,9 +21,11 @@ func InitApp(conf AppConfig) App {
 	var db domain.Database
 	if conf.DB.Driver == "mysql" {
 		db = data.NewMySqlDB(conf.DB)
+		db.Init()
+		defer db.Close()
+		return App{
+			Project: usecases.NewProjectUsecases(repository.NewProjectMySqlRepo(conf.DB)),
+		}
 	}
-	db.Init()
-	return App{
-		Project: usecases.NewProjectUsecases(repository.NewProjectRepo()),
-	}
+	return App{}
 }

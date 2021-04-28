@@ -12,4 +12,5 @@ type DatabaseConfig struct {
 type Database interface {
 	Init()
 	Clear()
+	Close()
 }
