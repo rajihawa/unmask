@@ -1,6 +1,6 @@
 package repository
 
-import "github.com/rajihawa/unmask/domain"
+import "github.com/rajihawa/unmask/app/domain"
 
 type ProjectRepo struct {
 }

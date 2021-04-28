@@ -1,6 +1,6 @@
 package usecases
 
-import "github.com/rajihawa/unmask/domain"
+import "github.com/rajihawa/unmask/app/domain"
 
 type ProjectUsecases struct {
 	repo domain.ProjectRepo
