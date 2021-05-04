@@ -17,22 +17,22 @@ func NewClientMySqlRepo() domain.ClientRepo {
 	}
 }
 
-func (cu ClientMySqlRepo) GetOne(id string) (*domain.Client, error) {
+func (c ClientMySqlRepo) GetOne(id string) (*domain.Client, error) {
 	panic("not implemented") // TODO: Implement
 }
 
-func (cu ClientMySqlRepo) GetAll(limit int, offset int) ([]domain.Client, error) {
+func (c ClientMySqlRepo) GetAll(limit int, offset int) ([]domain.Client, error) {
 	panic("not implemented") // TODO: Implement
 }
 
-func (cu ClientMySqlRepo) UpdateOne(id string, newClient domain.Client) error {
+func (c ClientMySqlRepo) UpdateOne(id string, newClient domain.Client) error {
 	panic("not implemented") // TODO: Implement
 }
 
-func (cu ClientMySqlRepo) CreateOne(newClient domain.Client) error {
+func (c ClientMySqlRepo) CreateOne(newClient domain.Client) error {
 	panic("not implemented") // TODO: Implement
 }
 
-func (cu ClientMySqlRepo) DeleteOne(id string) error {
+func (c ClientMySqlRepo) DeleteOne(id string) error {
 	panic("not implemented") // TODO: Implement
 }
