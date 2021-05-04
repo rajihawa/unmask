@@ -16,6 +16,7 @@ type AppConfig struct {
 
 type App struct {
 	Project domain.ProjectUsecases
+	Client  domain.ClientUsecases
 	Env     string
 	DB      domain.Database
 }
@@ -28,6 +29,7 @@ func InitApp(conf AppConfig) App {
 
 		return App{
 			Project: usecases.NewProjectUsecases(repository.NewProjectMySqlRepo()),
+			Client:  usecases.NewClientUsecases(repository.NewClientMySqlRepo()),
 			Env:     conf.Env,
 			DB:      db,
 		}
