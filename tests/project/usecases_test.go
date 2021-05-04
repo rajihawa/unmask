@@ -27,7 +27,7 @@ func TestProjectUsecases(t *testing.T) {
 		Description: "test description of project",
 	}
 	log.Println("Testing CreateProject")
-	err := app.Project.CreateProject(*project)
+	newId, err := app.Project.CreateProject(*project)
 	if err != nil {
 		t.Errorf("Failed to create project %+v", err)
 	}
@@ -43,6 +43,11 @@ func TestProjectUsecases(t *testing.T) {
 	}
 
 	createdProject := projects[0]
+
+	if createdProject.ID != newId {
+		t.Errorf("Project ID expected %s but got %s", newId, createdProject.ID)
+	}
+
 	newProject := createdProject
 	newProject.Name = "updated test project"
 
