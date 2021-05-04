@@ -8,16 +8,18 @@ import (
 	"github.com/rajihawa/unmask/app/domain"
 )
 
+var appConfig = app.AppConfig{DB: domain.DatabaseConfig{
+	Driver:   "mysql",
+	Host:     "localhost",
+	Database: "db",
+	Port:     "3306",
+	Username: "user",
+	Password: "password",
+},
+	Env: "testing"}
+
 func TestProjectUsecases(t *testing.T) {
-	app := app.InitApp(app.AppConfig{DB: domain.DatabaseConfig{
-		Driver:   "mysql",
-		Host:     "localhost",
-		Database: "db",
-		Port:     "3306",
-		Username: "user",
-		Password: "password",
-	},
-		Env: "testing"})
+	app := app.InitApp(appConfig)
 	defer app.Close()
 
 	project := &domain.Project{
