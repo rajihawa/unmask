@@ -26,14 +26,17 @@ func (u *ProjectUsecases) UpdateProject(id string, newProject domain.Project) er
 	return u.repo.UpdateOne(id, newProject)
 }
 
-func (u *ProjectUsecases) CreateProject(newProject domain.Project) error {
+func (u *ProjectUsecases) CreateProject(newProject domain.Project) (string, error) {
 	id := uuid.New().String()
 	project := domain.Project{
 		ID:          id,
 		Name:        newProject.Name,
 		Description: newProject.Description,
 	}
-	return u.repo.CreateOne(project)
+	if err := u.repo.CreateOne(project); err != nil {
+		return "", err
+	}
+	return id, nil
 }
 
 func (u *ProjectUsecases) DeleteProject(id string) error {

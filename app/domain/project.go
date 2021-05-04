@@ -26,6 +26,6 @@ type ProjectUsecases interface {
 	GetProject(id string) (*Project, error)
 	GetProjects(limit int, offset int) ([]Project, error)
 	UpdateProject(id string, newProject Project) error
-	CreateProject(newProject Project) error
+	CreateProject(newProject Project) (string, error)
 	DeleteProject(id string) error
 }
