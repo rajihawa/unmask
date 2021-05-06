@@ -5,7 +5,7 @@ run:
 	./main
 
 test:
-	go test ./tests/*
+	go test ./...
 
 
 setup:
