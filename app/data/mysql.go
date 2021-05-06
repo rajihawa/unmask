@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"path"
 	"strings"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -49,7 +48,7 @@ func (mdb *MySqlDB) Init() {
 		log.Println("Error while getting current path")
 		panic(err)
 	}
-	migrationsPath := path.Join(path.Dir(pwd), "../")
+	migrationsPath := pwd
 	m, err := migrate.NewWithDatabaseInstance(fmt.Sprintf("file://%s/migrations", migrationsPath), mdb.Config.Driver, driver)
 	if err != nil {
 		log.Println("Error while getting migration instance.")
