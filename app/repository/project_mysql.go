@@ -6,6 +6,7 @@ import (
 	"github.com/Masterminds/squirrel"
 	"github.com/rajihawa/unmask/app/data"
 	"github.com/rajihawa/unmask/app/domain"
+	"github.com/rajihawa/unmask/app/utils"
 )
 
 type ProjectMySqlRepo struct {
@@ -26,7 +27,8 @@ func (p *ProjectMySqlRepo) GetOne(id string) (*domain.Project, error) {
 	}
 	emptyProject := domain.Project{}
 	for rows.Next() {
-		err := rows.Scan(&emptyProject.ID, &emptyProject.Name, &emptyProject.Description, &emptyProject.UserCount, &emptyProject.CreatedAt, &emptyProject.UpdatedAt)
+		// err := rows.Scan(&emptyProject.ID, &emptyProject.Name, &emptyProject.Description, &emptyProject.UserCount, &emptyProject.CreatedAt, &emptyProject.UpdatedAt)
+		err := utils.ScanStruct(rows, &emptyProject)
 		if err != nil {
 			return nil, err
 		}
@@ -43,7 +45,7 @@ func (p *ProjectMySqlRepo) GetAll(limit int, offset int) ([]domain.Project, erro
 	emptyProjects := []domain.Project{}
 	for rows.Next() {
 		emptyProject := domain.Project{}
-		err := rows.Scan(&emptyProject.ID, &emptyProject.Name, &emptyProject.Description, &emptyProject.UserCount, &emptyProject.CreatedAt, &emptyProject.UpdatedAt)
+		err := utils.ScanStruct(rows, &emptyProject)
 		if err != nil {
 			return nil, err
 		}

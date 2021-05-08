@@ -27,6 +27,7 @@ func (cu ClientUsecases) UpdateClient(id string, newClient domain.Client) error 
 }
 
 func (cu ClientUsecases) CreateClient(projectID string, newClient domain.Client) (string, error) {
+	cu.repo.CreateOne(newClient)
 	panic("not implemented") // TODO: Implement
 }
 

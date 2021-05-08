@@ -38,7 +38,7 @@ func TestProjectUsecases(t *testing.T) {
 		t.Errorf("Failed to get projects %+v", err)
 	}
 	projectsCount := len(projects)
-	if projectsCount != 1 {
+	if projectsCount < 1 {
 		t.Errorf("Projects length expected %d but got %d", 1, projectsCount)
 	}
 

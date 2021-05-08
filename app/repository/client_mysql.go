@@ -26,6 +26,7 @@ func (c ClientMySqlRepo) GetOne(id string) (*domain.Client, error) {
 	}
 	emptyClient := domain.Client{}
 	for rows.Next() {
+
 		err := rows.Scan(&emptyClient.ID, &emptyClient.Secret, &emptyClient.Name, &emptyClient.Description, &emptyClient.HomeURL, &emptyClient.CallbackURL, &emptyClient.Privileges, &emptyClient.AutoVerify, &emptyClient.CreatedAt, &emptyClient.UpdatedAt, &emptyClient.ProjectID)
 		if err != nil {
 			return nil, err
@@ -62,9 +63,19 @@ func (c ClientMySqlRepo) UpdateOne(id string, newClient domain.Client) error {
 }
 
 func (c ClientMySqlRepo) CreateOne(newClient domain.Client) error {
-	panic("not implemented") // TODO: Implement
+	createQuery := squirrel.Insert("clients").Columns("id", "name", "description", "home_url", "callback_url", "privileges", "auto_verify").Values(newClient.ID, newClient.Name, newClient.Description, newClient.HomeURL, newClient.CallbackURL, newClient.Privileges, newClient.AutoVerify)
+	_, err := createQuery.RunWith(c.db).Exec()
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (c ClientMySqlRepo) DeleteOne(id string) error {
-	panic("not implemented") // TODO: Implement
+	deleteQuery := squirrel.Delete("clients").Where(squirrel.Eq{"id": id})
+	_, err := deleteQuery.RunWith(c.db).Exec()
+	if err != nil {
+		return err
+	}
+	return nil
 }

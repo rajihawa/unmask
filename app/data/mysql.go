@@ -59,11 +59,11 @@ func (mdb *MySqlDB) Init() {
 
 func (mdb *MySqlDB) Clear() {
 	err := mdb.Migration.Down()
-	if err != nil {
-		log.Println("Error while migrating up.")
+	if err != nil && !strings.Contains(err.Error(), "no change") {
+		log.Println("Error while migrating down.")
 		panic(err)
 	}
 }
 func (mdb *MySqlDB) Close() {
-	// mdb.DB.Close()
+	MySQL.Close()
 }
