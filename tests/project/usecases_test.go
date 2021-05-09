@@ -5,29 +5,15 @@ import (
 	"testing"
 
 	"github.com/rajihawa/unmask/app"
-	"github.com/rajihawa/unmask/app/domain"
+	"github.com/rajihawa/unmask/tests"
 )
 
-var appConfig = app.AppConfig{DB: domain.DatabaseConfig{
-	Driver:   "mysql",
-	Host:     "localhost",
-	Database: "db",
-	Port:     "3306",
-	Username: "user",
-	Password: "password",
-},
-	Env: "testing"}
-
 func TestProjectUsecases(t *testing.T) {
-	app := app.InitApp(appConfig)
+	app := app.InitApp(tests.AppConfig)
 	defer app.Close()
 
-	project := &domain.Project{
-		Name:        "test project",
-		Description: "test description of project",
-	}
 	log.Println("Testing CreateProject")
-	newId, err := app.Project.CreateProject(*project)
+	newId, err := app.Project.CreateProject(*tests.NewProject)
 	if err != nil {
 		t.Errorf("Failed to create project %+v", err)
 	}

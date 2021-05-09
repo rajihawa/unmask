@@ -5,7 +5,7 @@ import (
 	"github.com/rajihawa/unmask/app/domain"
 )
 
-var appConfig = app.AppConfig{DB: domain.DatabaseConfig{
+var appConfig = domain.AppConfig{DB: domain.DatabaseConfig{
 	Driver:   "mysql",
 	Host:     "localhost",
 	Database: "db",
@@ -13,25 +13,12 @@ var appConfig = app.AppConfig{DB: domain.DatabaseConfig{
 	Username: "user",
 	Password: "password",
 },
-	Env: "development"}
-
-type Student struct {
-	Fname  string
-	Lname  string
-	City   string
-	Mobile int64
-}
+	Env: domain.Env{
+		Stage:  "development",
+		Domain: "unmask.local.com",
+	}}
 
 func main() {
-	// s := Student{"Chetan", "Kumar", "Bangalore", 7777777777}
-	// v := reflect.ValueOf(&s).Elem()
-	// typeOfS := v.Type()
-
-	// for i := 0; i < v.NumField(); i++ {
-
-	// 	fmt.Printf("Field: %s\tValue: %v\n", typeOfS.Field(i).Name, v.Field(i).Interface())
-	// }
-	// return
 	app := app.InitApp(appConfig)
 	defer app.Close()
 	client := domain.Client{

@@ -4,17 +4,17 @@ import (
 	"database/sql"
 
 	"github.com/Masterminds/squirrel"
-	"github.com/rajihawa/unmask/app/data"
 	"github.com/rajihawa/unmask/app/domain"
+	"github.com/rajihawa/unmask/app/utils"
 )
 
 type ClientMySqlRepo struct {
 	db *sql.DB
 }
 
-func NewClientMySqlRepo() domain.ClientRepo {
+func NewClientMySqlRepo(db *sql.DB) domain.ClientRepo {
 	return &ClientMySqlRepo{
-		db: data.MySQL,
+		db: db,
 	}
 }
 
@@ -27,7 +27,8 @@ func (c ClientMySqlRepo) GetOne(id string) (*domain.Client, error) {
 	emptyClient := domain.Client{}
 	for rows.Next() {
 
-		err := rows.Scan(&emptyClient.ID, &emptyClient.Secret, &emptyClient.Name, &emptyClient.Description, &emptyClient.HomeURL, &emptyClient.CallbackURL, &emptyClient.Privileges, &emptyClient.AutoVerify, &emptyClient.CreatedAt, &emptyClient.UpdatedAt, &emptyClient.ProjectID)
+		// err := rows.Scan(&emptyClient.ID, &emptyClient.Secret, &emptyClient.Name, &emptyClient.Description, &emptyClient.HomeURL, &emptyClient.CallbackURL, &emptyClient.Privileges, &emptyClient.AutoVerify, &emptyClient.CreatedAt, &emptyClient.UpdatedAt, &emptyClient.ProjectID)
+		err := utils.ScanStruct(rows, &emptyClient)
 		if err != nil {
 			return nil, err
 		}
@@ -44,10 +45,12 @@ func (c ClientMySqlRepo) GetAll(limit int, offset int) ([]domain.Client, error) 
 	emptyClients := []domain.Client{}
 	for rows.Next() {
 		emptyClient := domain.Client{}
-		err := rows.Scan(&emptyClient.ID, &emptyClient.Secret, &emptyClient.Name, &emptyClient.Description, &emptyClient.HomeURL, &emptyClient.CallbackURL, &emptyClient.Privileges, &emptyClient.AutoVerify, &emptyClient.CreatedAt, &emptyClient.UpdatedAt, &emptyClient.ProjectID)
+		// err := rows.Scan(&emptyClient.ID, &emptyClient.Secret, &emptyClient.Name, &emptyClient.Description, &emptyClient.HomeURL, &emptyClient.CallbackURL, &emptyClient.Privileges, &emptyClient.AutoVerify, &emptyClient.CreatedAt, &emptyClient.UpdatedAt, &emptyClient.ProjectID)
+		err := utils.ScanStruct(rows, &emptyClient)
 		if err != nil {
 			return nil, err
 		}
+
 		emptyClients = append(emptyClients, emptyClient)
 	}
 	return emptyClients, nil
@@ -63,7 +66,7 @@ func (c ClientMySqlRepo) UpdateOne(id string, newClient domain.Client) error {
 }
 
 func (c ClientMySqlRepo) CreateOne(newClient domain.Client) error {
-	createQuery := squirrel.Insert("clients").Columns("id", "name", "description", "home_url", "callback_url", "privileges", "auto_verify").Values(newClient.ID, newClient.Name, newClient.Description, newClient.HomeURL, newClient.CallbackURL, newClient.Privileges, newClient.AutoVerify)
+	createQuery := squirrel.Insert("clients").Columns("id", "secret", "name", "description", "home_url", "callback_url", "privileges", "auto_verify", "public", "project_id").Values(newClient.ID, newClient.Secret, newClient.Name, newClient.Description, newClient.HomeURL, newClient.CallbackURL, newClient.Privileges, newClient.AutoVerify, newClient.Public, newClient.ProjectID)
 	_, err := createQuery.RunWith(c.db).Exec()
 	if err != nil {
 		return err

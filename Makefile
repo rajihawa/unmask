@@ -5,7 +5,7 @@ run:
 	./main
 
 test:
-	go test ./...
+	go test -v -p 1 ./...
 
 
 setup:

@@ -6,40 +6,22 @@ import (
 	"github.com/rajihawa/unmask/app/data"
 	"github.com/rajihawa/unmask/app/domain"
 	"github.com/rajihawa/unmask/app/repository"
-	usecases "github.com/rajihawa/unmask/app/usecases"
+	"github.com/rajihawa/unmask/app/usecases"
 )
 
-type AppConfig struct {
-	DB  domain.DatabaseConfig
-	Env string
-}
-
-type App struct {
-	Project domain.ProjectUsecases
-	Client  domain.ClientUsecases
-	Env     string
-	DB      domain.Database
-}
-
-func InitApp(conf AppConfig) App {
+func InitApp(conf domain.AppConfig) domain.App {
 	var db domain.Database
 	if conf.DB.Driver == "mysql" {
 		db = data.NewMySqlDB(conf.DB)
-		db.Init()
+		var dbSess domain.DatabaseSessions
+		db.Init(&dbSess)
 
-		return App{
-			Project: usecases.NewProjectUsecases(repository.NewProjectMySqlRepo()),
-			Client:  usecases.NewClientUsecases(repository.NewClientMySqlRepo()),
-			Env:     conf.Env,
+		return domain.App{
+			Project: usecases.NewProjectUsecases(repository.NewProjectMySqlRepo(dbSess.MySQL), conf.Env),
+			Client:  usecases.NewClientUsecases(repository.NewClientMySqlRepo(dbSess.MySQL), conf.Env),
 			DB:      db,
+			Env:     conf.Env,
 		}
 	}
-	return App{}
-}
-
-func (a *App) Close() {
-	if a.Env == "testing" {
-		a.DB.Clear()
-	}
-	a.DB.Close()
+	return domain.App{}
 }

@@ -7,11 +7,13 @@ import (
 
 type ProjectUsecases struct {
 	repo domain.ProjectRepo
+	env  domain.Env
 }
 
-func NewProjectUsecases(repo domain.ProjectRepo) domain.ProjectUsecases {
+func NewProjectUsecases(repo domain.ProjectRepo, env domain.Env) domain.ProjectUsecases {
 	return &ProjectUsecases{
 		repo: repo,
+		env:  env,
 	}
 }
 func (u *ProjectUsecases) GetProject(id string) (*domain.Project, error) {
@@ -28,12 +30,9 @@ func (u *ProjectUsecases) UpdateProject(id string, newProject domain.Project) er
 
 func (u *ProjectUsecases) CreateProject(newProject domain.Project) (string, error) {
 	id := uuid.New().String()
-	project := domain.Project{
-		ID:          id,
-		Name:        newProject.Name,
-		Description: newProject.Description,
-	}
-	if err := u.repo.CreateOne(project); err != nil {
+	project := &newProject
+	project.ID = id
+	if err := u.repo.CreateOne(*project); err != nil {
 		return "", err
 	}
 	return id, nil

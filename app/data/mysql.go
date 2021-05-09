@@ -30,7 +30,7 @@ func NewMySqlDB(conf domain.DatabaseConfig) *MySqlDB {
 	}
 }
 
-func (mdb *MySqlDB) Init() {
+func (mdb *MySqlDB) Init(sess *domain.DatabaseSessions) {
 	url := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", mdb.Config.Username, mdb.Config.Password, mdb.Config.Host, mdb.Config.Port, mdb.Config.Database)
 	db, err := sql.Open(mdb.Config.Driver, url)
 	if err != nil {
@@ -38,6 +38,7 @@ func (mdb *MySqlDB) Init() {
 		panic(err)
 	}
 	MySQL = db
+	sess.MySQL = db
 	driver, err := mysql.WithInstance(db, &mysql.Config{})
 	if err != nil {
 		log.Println("Error while getting driver instance.")
@@ -64,6 +65,7 @@ func (mdb *MySqlDB) Clear() {
 		panic(err)
 	}
 }
+
 func (mdb *MySqlDB) Close() {
 	MySQL.Close()
 }

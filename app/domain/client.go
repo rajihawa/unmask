@@ -12,6 +12,7 @@ type Client struct {
 	CallbackURL string
 	Privileges  string
 	AutoVerify  bool
+	Public      bool
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 	ProjectID   string

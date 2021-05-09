@@ -5,53 +5,31 @@ import (
 	"testing"
 
 	"github.com/rajihawa/unmask/app"
-	"github.com/rajihawa/unmask/app/domain"
+	"github.com/rajihawa/unmask/tests"
 )
 
-var appConfig = app.AppConfig{DB: domain.DatabaseConfig{
-	Driver:   "mysql",
-	Host:     "localhost",
-	Database: "db",
-	Port:     "3306",
-	Username: "user",
-	Password: "password",
-},
-	Env: "testing"}
-
 func TestClientUsecases(t *testing.T) {
-	app := app.InitApp(appConfig)
+	app := app.InitApp(tests.AppConfig)
 	defer app.Close()
 
-	project := &domain.Project{
-		Name:        "test project",
-		Description: "test description of project",
-	}
 	log.Println("Testing CreateProject")
-	projectID, err := app.Project.CreateProject(*project)
+	projectID, err := app.Project.CreateProject(*tests.NewProject)
 	if err != nil {
 		t.Errorf("Failed to create project %+v", err)
 	}
 
-	client := &domain.Client{
-		Name:        "test client",
-		Description: "test description of client",
-		HomeURL:     "http://test.test",
-		CallbackURL: "http://test.test/auth",
-		Privileges:  "all",
-		AutoVerify:  true,
-	}
-
 	log.Println("Testing CreateClient")
-	newId, err := app.Client.CreateClient(projectID, *client)
+	newId, err := app.Client.CreateClient(projectID, *tests.NewClient)
 	if err != nil {
 		t.Errorf("Failed to create client %+v", err)
 	}
 
 	log.Println("Testing GetClients")
-	clients, err := app.Client.GetClients(0, 0)
+	clients, err := app.Client.GetClients(10, 0)
 	if err != nil {
 		t.Errorf("Failed to get clients %+v", err)
 	}
+
 	clientsCount := len(clients)
 	if clientsCount != 1 {
 		t.Errorf("Clients length expected %d but got %d", 1, clientsCount)
