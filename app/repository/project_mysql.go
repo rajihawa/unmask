@@ -4,6 +4,7 @@ import (
 	"database/sql"
 
 	"github.com/Masterminds/squirrel"
+	"github.com/rajihawa/unmask/app/data"
 	"github.com/rajihawa/unmask/app/domain"
 	"github.com/rajihawa/unmask/app/utils"
 )
@@ -12,9 +13,9 @@ type ProjectMySqlRepo struct {
 	db *sql.DB
 }
 
-func NewProjectMySqlRepo(db *sql.DB) domain.ProjectRepo {
+func NewProjectMySqlRepo() domain.ProjectRepo {
 	return &ProjectMySqlRepo{
-		db: db,
+		db: data.MySQL,
 	}
 }
 

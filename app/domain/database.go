@@ -1,7 +1,5 @@
 package domain
 
-import "database/sql"
-
 type DatabaseConfig struct {
 	Driver   string
 	Host     string
@@ -11,12 +9,8 @@ type DatabaseConfig struct {
 	Password string
 }
 
-type DatabaseSessions struct {
-	MySQL *sql.DB
-}
-
 type Database interface {
-	Init(sess *DatabaseSessions)
+	Init()
 	Clear()
 	Close()
 }

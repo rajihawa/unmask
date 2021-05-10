@@ -13,12 +13,12 @@ func InitApp(conf domain.AppConfig) domain.App {
 	var db domain.Database
 	if conf.DB.Driver == "mysql" {
 		db = data.NewMySqlDB(conf.DB)
-		var dbSess domain.DatabaseSessions
-		db.Init(&dbSess)
+		db.Init()
 
 		return domain.App{
-			Project: usecases.NewProjectUsecases(repository.NewProjectMySqlRepo(dbSess.MySQL), conf.Env),
-			Client:  usecases.NewClientUsecases(repository.NewClientMySqlRepo(dbSess.MySQL), conf.Env),
+			Project: usecases.NewProjectUsecases(repository.NewProjectMySqlRepo(), conf.Env),
+			Client:  usecases.NewClientUsecases(repository.NewClientMySqlRepo(), conf.Env),
+			User:    usecases.NewUserUsecases(repository.NewUserMySqlRepo(), conf.Env),
 			DB:      db,
 			Env:     conf.Env,
 		}

@@ -4,6 +4,7 @@ import (
 	"database/sql"
 
 	"github.com/Masterminds/squirrel"
+	"github.com/rajihawa/unmask/app/data"
 	"github.com/rajihawa/unmask/app/domain"
 	"github.com/rajihawa/unmask/app/utils"
 )
@@ -12,9 +13,9 @@ type ClientMySqlRepo struct {
 	db *sql.DB
 }
 
-func NewClientMySqlRepo(db *sql.DB) domain.ClientRepo {
+func NewClientMySqlRepo() domain.ClientRepo {
 	return &ClientMySqlRepo{
-		db: db,
+		db: data.MySQL,
 	}
 }
 

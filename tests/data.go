@@ -30,3 +30,12 @@ var NewClient = &domain.Client{
 	Privileges:  "all",
 	AutoVerify:  true,
 }
+var NewUser = &domain.UserSignup{
+	Username:        "test",
+	Email:           "test@test.com",
+	Password:        "test123",
+	PasswordConfirm: "test123",
+	Attributes: map[string]interface{}{
+		"age": 13,
+	},
+}

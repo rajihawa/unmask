@@ -15,6 +15,7 @@ type Env struct {
 type App struct {
 	Project ProjectUsecases
 	Client  ClientUsecases
+	User    UserUsecases
 	Env     Env
 	DB      Database
 }
