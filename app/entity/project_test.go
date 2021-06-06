@@ -15,4 +15,12 @@ func TestNewProject(t *testing.T) {
 	assert.Equal(t, p.Name, name)
 	assert.Equal(t, p.Description, description)
 	assert.NotNil(t, p.ID)
+	assert.Equal(t, 0, len(p.Users))
+}
+
+func TestAddUser(t *testing.T) {
+	p := entity.NewProject(name, description)
+	u := entity.NewUser(username, password)
+	p.AddUser(*u)
+	assert.Equal(t, 1, len(p.Users))
 }

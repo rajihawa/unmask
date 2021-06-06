@@ -11,7 +11,7 @@ type Project struct {
 	Description string
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
-	users       []User
+	Users       []User
 }
 
 // NewProject returns new project
@@ -28,14 +28,14 @@ func NewProject(name, description string) *Project {
 
 // AddUser - adds a user to the project
 func (p *Project) AddUser(u User) {
-	p.users = append(p.users, u)
+	p.Users = append(p.Users, u)
 }
 
 // GetUser - find a user in the project
 func (p *Project) GetUser(id string) (*User, error) {
-	for i, u := range p.users {
+	for i, u := range p.Users {
 		if u.ID == id {
-			return &p.users[i], nil
+			return &p.Users[i], nil
 		}
 	}
 	return nil, ErrNotFound
@@ -43,9 +43,9 @@ func (p *Project) GetUser(id string) (*User, error) {
 
 // RemoveUser - removes a user from the project
 func (p *Project) RemoveUser(id string) error {
-	for i, u := range p.users {
+	for i, u := range p.Users {
 		if u.ID == id {
-			p.users = append(p.users[:i], p.users[i+1:]...)
+			p.Users = append(p.Users[:i], p.Users[i+1:]...)
 			return nil
 		}
 	}
