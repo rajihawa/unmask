@@ -16,7 +16,7 @@ type User struct {
 }
 
 // NewUser - create a new user
-func NewUser(username, password string) *User {
+func NewUser(username, password string) (*User, error) {
 	u := &User{
 		ID:        GenerateRandomID(),
 		Username:  username,
@@ -28,7 +28,7 @@ func NewUser(username, password string) *User {
 	if err := u.validatePassword(pwdHash); err != nil {
 		panic("Password hashing not working correctly.")
 	}
-	return u
+	return u, nil
 }
 
 // private functions

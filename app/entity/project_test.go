@@ -11,7 +11,8 @@ var name = "New project"
 var description = "a new project for testing."
 
 func TestNewProject(t *testing.T) {
-	p := entity.NewProject(name, description)
+	p, err := entity.NewProject(name, description)
+	assert.Nil(t, err)
 	assert.Equal(t, p.Name, name)
 	assert.Equal(t, p.Description, description)
 	assert.NotNil(t, p.ID)
@@ -19,8 +20,8 @@ func TestNewProject(t *testing.T) {
 }
 
 func TestAddUser(t *testing.T) {
-	p := entity.NewProject(name, description)
-	u := entity.NewUser(username, password)
+	p, _ := entity.NewProject(name, description)
+	u, _ := entity.NewUser(username, password)
 	p.AddUser(*u)
 	assert.Equal(t, 1, len(p.Users))
 }
