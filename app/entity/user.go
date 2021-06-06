@@ -25,8 +25,8 @@ func NewUser(username, password string) (*User, error) {
 	}
 	pwdHash := hashPassword(password)
 	u.Password = pwdHash
-	if err := u.validatePassword(pwdHash); err != nil {
-		panic("Password hashing not working correctly.")
+	if err := u.validatePassword(password); err != nil {
+		panic(err)
 	}
 	return u, nil
 }

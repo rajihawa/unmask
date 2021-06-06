@@ -8,4 +8,4 @@ run:
 	go run
 
 test:
-	go test 
+	go test -tags testing ./...
