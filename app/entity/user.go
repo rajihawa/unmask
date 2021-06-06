@@ -3,7 +3,6 @@ package entity
 import (
 	"time"
 
-	"github.com/rajihawa/mask-off/lib/utils"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -19,7 +18,7 @@ type User struct {
 // NewUser - create a new user
 func NewUser(username, password string) *User {
 	u := &User{
-		ID:        utils.GenerateRandomID(),
+		ID:        GenerateRandomID(),
 		Username:  username,
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),

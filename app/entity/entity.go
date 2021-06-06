@@ -1,4 +1,4 @@
-package utils
+package entity
 
 import (
 	"encoding/hex"
