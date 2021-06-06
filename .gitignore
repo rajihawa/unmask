@@ -17,10 +17,6 @@
 # binary
 main
 
-#fresh
-tmp
-rethink_data
-
 .DS_Store
 node_modules
 /dist
