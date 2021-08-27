@@ -1,8 +1,11 @@
 build:
 	go build -o ./main main.go 
 
-run:
+start:
 	./main
 
+run:
+	go run
+
 test:
-	go test ./tests
+	go test -tags testing ./...
